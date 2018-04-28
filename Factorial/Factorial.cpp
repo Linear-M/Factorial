@@ -14,7 +14,7 @@ void factorial(long n), recursiveFactorial(long n);
 const long max = 100000000;
 
 int main() {
-	recursiveFactorial(100000);
+	recursiveFactorial(100000); 
 	return 0;
 }
 
