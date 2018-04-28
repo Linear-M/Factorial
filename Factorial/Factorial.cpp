@@ -9,7 +9,7 @@
 
 using namespace std;
 
-unsigned long long multiply(long x, long res[], long res_size), recursiveMultiply(long x, long res[], long res_size, long n);
+unsigned long long multiply(long x, long res[], long res_size), recursiveMultiply(long x, long res[], long res_size, long n); 
 void factorial(long n), recursiveFactorial(long n);
 const long max = 100000000;
 
