@@ -8,9 +8,9 @@
 
 using namespace std;
 
-unsigned long long multiply(long x, long res[], long res_size), recursiveMultiply(long x, long res[], long res_size, long n); 
+unsigned long long multiply(long x, long res[], long res_size, long n), recursiveMultiply(long x, long res[], long res_size, long n); 
 void factorial(long n), recursiveFactorial(long n), outputToFile(int size, long numberToOutput[], long n);
-const long max = 100000000;
+const long max = 200000000;
 
 int main() {
 	int selectedMethod;
@@ -36,23 +36,29 @@ int main() {
 			//Iterative
 			cout << "Please Enter n!: ";
 			cin >> numberToFactorialise;
+			system("cls");
 			clockStart = clock();
 			factorial(numberToFactorialise);
+			system("cls");
+			cout << "Iterative Factorial Calculation\n";
+			cout << "-------------------------------\n";
 			break;
 		}
 		case(2): {
 			//Recursive
 			cout << "Please Enter n!: ";
 			cin >> numberToFactorialise;
+			system("cls");
 			clockStart = clock();
 			recursiveFactorial(numberToFactorialise);
+			system("cls");
+			cout << "Recursive Factorial Calculation\n";
+			cout << "-------------------------------\n";
 			break;
 		}
 		default:
 			break;
 		}
-
-		system("cls");
 
 		cout << numberToFactorialise << "! Has Been Calculated - Please See 'C:/Factorial/Factorial - " + to_string(numberToFactorialise) + ".txt'\n";
 		cout << "Factorial Calculation Took " << ((clock() - clockStart) / (double)CLOCKS_PER_SEC) << " Seconds\n";
@@ -71,7 +77,7 @@ void factorial(long n)
 
 	//Iterative factorial approach (calls function multiply however is still loop-based)
 	for (long x = 1; x <= n; x++){
-		overflow_size = multiply(x, overflow, overflow_size);
+		overflow_size = multiply(x, overflow, overflow_size, n);
 	}
 
 	//Print the results of the loop
@@ -92,7 +98,7 @@ void outputToFile(int size, long numberToOutput[], long n) {
 }
 
 // Takes res[] as input (representation/number of digits) and multiplies it by the long x
-unsigned long long multiply(long x, long res[], long res_size)
+unsigned long long multiply(long x, long res[], long res_size, long n)
 {
 	/*Starting some GCSE maths*/
 	long carry = 0;  
@@ -114,25 +120,21 @@ unsigned long long multiply(long x, long res[], long res_size)
 		carry = carry / 10;
 		res_size++;
 	}
+
+	//cout << ((x % (n/100)) == 0 ? "\rPercentage Complete (Iterative " + to_string(n) + "!): " + to_string((int)(((double)x / (double)n) * 100.0)) + "%":"");
+	cout << "\rPercentage Complete (Iterative " + to_string(n) + "!): " + to_string((((double)x / (double)n) * 100.0)) + "%";
+
 	return res_size;
 }
 
 void recursiveFactorial(long n)
 {
-	long overflow[max];
 	//Instantiate the array which will hold overflows of the main factorial number
+	long overflow[max];
 	overflow[0] = 1;
-	long overflow_size = 1;
 
-
-	overflow_size = recursiveMultiply(1, overflow, overflow_size, n);
-
-	//Create output information
-	ofstream outputFile;
-	outputFile.open("C:\\Factorial\\Factorial - " + to_string(n) + ".txt");
-
-	//Print the results of the loop
-	outputToFile(overflow_size, overflow, n);
+	//Recursively calculate and print
+	outputToFile(recursiveMultiply(1, overflow, 1, n), overflow, n);
 }
 
 // Takes res[] as input (representation/number of digits) and multiplies it by the long x
@@ -158,6 +160,8 @@ unsigned long long recursiveMultiply(long x, long res[], long res_size, long n)
 		carry = carry / 10;
 		res_size++;
 	}
+
+	cout << ((x % (n / 100)) == 0 ? "\rPercentage Complete (Recursive " + to_string(n) + "!): " + to_string((int)(((double)x / (double)n) * 100.0)) + "%" : "");
 
 	return (x == n) ? res_size : recursiveMultiply((x+1), res, res_size, n);
 }
