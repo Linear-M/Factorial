@@ -1,20 +1,64 @@
 #include "stdafx.h"
-#include <stdio.h>
 #include <conio.h>
 #include <iostream>
 #include <limits>
 #include <fstream>
 #include <string>
-
+#include <ctime>
 
 using namespace std;
 
 unsigned long long multiply(long x, long res[], long res_size), recursiveMultiply(long x, long res[], long res_size, long n); 
-void factorial(long n), recursiveFactorial(long n);
+void factorial(long n), recursiveFactorial(long n), outputToFile(int size, long numberToOutput[], long n);
 const long max = 100000000;
 
 int main() {
-	recursiveFactorial(100000); 
+	int selectedMethod;
+	int numberToFactorialise;
+	clock_t clockStart;
+
+	while (true)
+	{
+		system("cls");
+		cout << "BSc Computing and Internet Technologies - Advanced Programming A2 - Benjamin Pople" << endl << endl;
+
+		cout << "1. Iterative" << endl;
+		cout << "2. Recursive" << endl;
+		cout << "Please Select a Factorial Calculation Method (1/2): ";
+
+		cin >> selectedMethod;
+
+		system("cls");
+
+		switch (selectedMethod)
+		{
+		case(1): {
+			//Iterative
+			cout << "Please Enter n!: ";
+			cin >> numberToFactorialise;
+			clockStart = clock();
+			factorial(numberToFactorialise);
+			break;
+		}
+		case(2): {
+			//Recursive
+			cout << "Please Enter n!: ";
+			cin >> numberToFactorialise;
+			clockStart = clock();
+			recursiveFactorial(numberToFactorialise);
+			break;
+		}
+		default:
+			break;
+		}
+
+		system("cls");
+
+		cout << numberToFactorialise << "! Has Been Calculated - Please See 'C:/Factorial/Factorial - " + to_string(numberToFactorialise) + ".txt'\n";
+		cout << "Factorial Calculation Took " << ((clock() - clockStart) / (double)CLOCKS_PER_SEC) << " Seconds\n";
+		cout << "Press Enter to Restart...";
+		_getch();
+	}
 	return 0;
 }
 
@@ -30,13 +74,18 @@ void factorial(long n)
 		overflow_size = multiply(x, overflow, overflow_size);
 	}
 
+	//Print the results of the loop
+	outputToFile(overflow_size, overflow, n);
+}
+
+void outputToFile(int size, long numberToOutput[], long n) {
 	//Create output information
 	ofstream outputFile;
-	outputFile.open("C:\\Ben\\Factorial - " + to_string(n) + ".txt");
+	outputFile.open("C:\\Factorial\\Factorial - " + to_string(n) + ".txt");
 
 	//Print the results of the loop
-	for (long i = overflow_size - 1; i >= 0; i--){
-		outputFile << overflow[i];
+	for (long i = size - 1; i >= 0; i--) {
+		outputFile << numberToOutput[i];
 	}
 
 	outputFile.close();
@@ -80,14 +129,10 @@ void recursiveFactorial(long n)
 
 	//Create output information
 	ofstream outputFile;
-	outputFile.open("C:\\Ben\\Factorial - " + to_string(n) + ".txt");
+	outputFile.open("C:\\Factorial\\Factorial - " + to_string(n) + ".txt");
 
 	//Print the results of the loop
-	for (long i = overflow_size - 1; i >= 0; i--) {
-		outputFile << overflow[i];
-	}
-
-	outputFile.close();
+	outputToFile(overflow_size, overflow, n);
 }
 
 // Takes res[] as input (representation/number of digits) and multiplies it by the long x
