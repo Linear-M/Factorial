@@ -17,7 +17,17 @@ class Helper {
 		bool Helper::outputToFile(int size, long numberToOutput[], long n);
 		bool Helper::protectFactoriseInputError();
 		bool Helper::protectMenuInputError();
+		bool Helper::printStartMenu();
 };
+
+bool Helper::printStartMenu() {
+	system("cls");
+	std::cout << "BSc Computing and Internet Technologies - Advanced Programming A2 - Benjamin Pople" << endl << endl;
+	std::cout << "1. Iterative" << endl;
+	std::cout << "2. Recursive" << endl;
+	std::cout << "Please Select a Factorial Calculation Method (1/2): ";
+	return true;
+}
 
 //If error is detected on n input
 bool Helper::protectFactoriseInputError() {
@@ -26,8 +36,8 @@ bool Helper::protectFactoriseInputError() {
 	//Clear cin buffer
 	cin.ignore(max, '\n');
 	//Error message and restart
-	cout << "Incorrect or Negative Number Entered\n";
-	cout << "Press Enter to Restart...";
+	std::cout << "Incorrect or Negative Number Entered\n";
+	std::cout << "Press Enter to Restart...";
 	_getch();
 	return true;
 }
@@ -40,7 +50,7 @@ bool Helper::protectMenuInputError() {
 	cin.ignore(max, '\n');
 	//Show error message
 	system("cls");
-	cout << "Incorrect Menu Entry, Press Enter to Try Again...";
+	std::cout << "Incorrect Menu Entry, Press Enter to Try Again...";
 	_getch();
 	return true;
 }
@@ -62,7 +72,7 @@ bool Helper::outputToFile(int size, long numberToOutput[], long n) {
 	else {
 		//Show error message
 		system("cls");
-		cout << "Invalid Output Detected - Press Enter to Restart\n";
+		std::cout << "Invalid Output Detected - Press Enter to Restart\n";
 		_getch();
 		outputFile.close();
 		return false;
@@ -86,7 +96,7 @@ void Factorial::factorise(long n)
 	long long_overflow[max];
 	//Instantiate the array which will hold overflows of the main factorial number
 	long_overflow[0] = 1;
-	long longOverflowSize = 1;
+	unsigned long longOverflowSize = 1;
 
 	//Iterative factorial approach (calls function multiply however is still loop-based)
 	for (long x = 1; x <= n; x++) {
@@ -122,8 +132,10 @@ unsigned long long Factorial::multiply(long iterator, long tempOverflowArr[], lo
 		tempOverflowArrSize++;
 	}
 
-	cout << ((iterator % ((n+100) / 100)) == 0 ? "\rPercentage Complete (Iterative " + to_string(n) + "!): " + to_string((int)(((double)iterator / (double)n) * 100.0)) + "%" : "");
-	//cout << "\rPercentage Complete (Iterative " + to_string(n) + "!): " + to_string((((double)iterator / (double)n) * 100.0)) + "%";
+	std::cout << ((iterator % ((n+100) / 100)) == 0 ? "\rPercentage Complete (Iterative " + to_string(n) + "!): " + to_string((int)(((double)iterator / (double)n) * 100.0)) + "%" : "");
+	
+	//std::cout << "\rPercentage Complete (Iterative " + to_string(n) + "!): " + to_string((((double)iterator / (double)n) * 100.0)) + "%";
+	//system(("TITLE " + to_string((((double)iterator / (double)n) * 100.0)) + "%").c_str());
 
 	return tempOverflowArrSize;
 }
@@ -145,7 +157,7 @@ bool Factorial::outputToFile(int size, long numberToOutput[], long n) {
 	else {
 		//Show error message
 		system("cls");
-		cout << "Invalid Output Detected - Press Enter to Restart\n";
+		std::cout << "Invalid Output Detected - Press Enter to Restart\n";
 		_getch();
 		outputFile.close();
 		return false;
@@ -196,7 +208,7 @@ unsigned long long RecursiveFactorial::recursiveMultiply(long iterator, long tem
 		tempOverflowArrSize++;
 	}
 
-	cout << ((iterator % (n / 100)) == 0 ? "\rPercentage Complete (Recursive " + to_string(n) + "!): " + to_string((int)(((double)iterator / (double)n) * 100.0)) + "%" : "");
+	std::cout << ((iterator % (n / 100)) == 0 ? "\rPercentage Complete (Recursive " + to_string(n) + "!): " + to_string((int)(((double)iterator / (double)n) * 100.0)) + "%" : "");
 
 	return (iterator == n) ? tempOverflowArrSize : recursiveMultiply((iterator + 1), tempOverflowArr, tempOverflowArrSize, n);
 }
@@ -209,19 +221,17 @@ int main() {
 	clock_t clockStart;
 	Helper helper;
 
+	system("TITLE Ben Pople - Factorial Calculator - BSc (Hons) Computing and Internet Technologies");
+
 	while (true)
 	{
-		system("cls");
-		cout << "BSc Computing and Internet Technologies - Advanced Programming A2 - Benjamin Pople" << endl << endl;
-		cout << "1. Iterative" << endl;
-		cout << "2. Recursive" << endl;
-		cout << "Please Select a Factorial Calculation Method (1/2): ";
-
+		helper.printStartMenu();
 		cin >> selectedMethod;
 
 		/* If we get incorrect user input, such as a string, cin throws an error that will case infinite loop */
-		if (cin.fail()) if (helper.protectMenuInputError()) main();
-		
+		if (cin.fail()) 
+			if (helper.protectMenuInputError()) 
+				main();
 
 		system("cls");
 
@@ -229,12 +239,14 @@ int main() {
 		{
 		case(1): {
 			//Iterative
-			cout << "Please Enter n!: ";
+			std::cout << "Please Enter n!: ";
 			cin >> numberToFactorialise;
 			if (!cin.fail())
 			{
 				//If negative number has been entered 
-				if (numberToFactorialise < 0) if (helper.protectFactoriseInputError()) main();
+				if (numberToFactorialise < 0) 
+					if (helper.protectFactoriseInputError())
+						main();
 
 				//Start clock, calculate factorial and begin output
 				system("cls");
@@ -244,8 +256,8 @@ int main() {
 				factorial.Factorial::factorise(numberToFactorialise);
 
 				system("cls");
-				cout << "Iterative Factorial Calculation\n";
-				cout << "-------------------------------\n";
+				std::cout << "Iterative Factorial Calculation\n";
+				std::cout << "-------------------------------\n";
 			} else {
 				if (helper.protectFactoriseInputError()) main();
 			}
@@ -253,7 +265,7 @@ int main() {
 		}
 		case(2): {
 			//Recursive
-			cout << "Please Enter n!: ";
+			std::cout << "Please Enter n!: ";
 			cin >> numberToFactorialise;
 			if (!cin.fail())
 			{
@@ -266,8 +278,8 @@ int main() {
 				RecursiveFactorial recursiveFactorial;
 				recursiveFactorial.recursiveFactorial(numberToFactorialise);
 				system("cls");
-				cout << "Recursive Factorial Calculation\n";
-				cout << "-------------------------------\n";
+				std::cout << "Recursive Factorial Calculation\n";
+				std::cout << "-------------------------------\n";
 			} else {
 				if(helper.protectFactoriseInputError()) main();
 			}
@@ -278,9 +290,9 @@ int main() {
 			break;
 		}
 
-		cout << numberToFactorialise << "! Has Been Calculated - Please See 'C:/Factorial/Factorial - " + to_string(numberToFactorialise) + ".txt'\n";
-		cout << "Factorial Calculation Took " << ((clock() - clockStart) / (double)CLOCKS_PER_SEC) << " Seconds\n";
-		cout << "Press Enter to Restart...";
+		std::cout << numberToFactorialise << "! Has Been Calculated - Please See 'C:/Factorial/Factorial - " + to_string(numberToFactorialise) + ".txt'\n";
+		std::cout << "Factorial Calculation Took " << ((clock() - clockStart) / (double)CLOCKS_PER_SEC) << " Seconds\n";
+		std::cout << "Press Enter to Restart...";
 		_getch();
 	}
 	return 0;
